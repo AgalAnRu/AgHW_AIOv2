@@ -14,6 +14,7 @@ namespace AgHW_AIO.Lessons
         internal static void SelectTask()
         {
             int selectedMenuItem = 0;
+            tasks.Clear();
             InitTasksList();
             do
             {

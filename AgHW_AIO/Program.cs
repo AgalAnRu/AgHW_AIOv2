@@ -17,7 +17,6 @@ namespace AgHW_AIO
         {
             InitLessonsList();
             SelectLesson();
-            //Console.ReadKey(true);
         }
         private static void SelectLesson()
         {
