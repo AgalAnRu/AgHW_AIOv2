@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgHW_AIO", "AgHW_AIO\AgHW_AIO.csproj", "{0F78D31B-3420-475D-B56C-E90025A879DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F78D31B-3420-475D-B56C-E90025A879DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F78D31B-3420-475D-B56C-E90025A879DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F78D31B-3420-475D-B56C-E90025A879DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F78D31B-3420-475D-B56C-E90025A879DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {933D0113-7899-4FCA-92A3-8934A2586BF8}
+	EndGlobalSection
+EndGlobal
