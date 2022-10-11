@@ -4,6 +4,9 @@ using AgHW_AIO.AgClasses;
 
 namespace AgHW_AIO.Lessons
 {
+    enum Direction { To_dB, From_dB };
+    enum Parameter { Voltage, Vibroacceleration }
+    enum Threshold { Actual, Old }
     internal static class HomeWork5
     {
         private static Random rnd = new Random();
@@ -11,6 +14,7 @@ namespace AgHW_AIO.Lessons
         delegate void methods();
         private static readonly methods[] methodTasks = new methods[] {DoTask1, DoTask2, DoTask3,
                                                                DoTask4};
+
         internal static void SelectTask()
         {
             int selectedMenuItem = 0;
@@ -36,8 +40,36 @@ namespace AgHW_AIO.Lessons
         }
         private static void DoTask1()
         {
-
+            double result = 0;
+            Direction direction = SelectDirection();
+            Parameter parameter = SelectParameter();
+            if (parameter == Parameter.Voltage)
+                result = CalculateResult(direction, parameter);
+            if (parameter == Parameter.Vibroacceleration)
+            {
+                Threshold threshold = SelectThreshold();
+                result = CalculateResult(direction, parameter, threshold);
+            }
+            PrintResult(result, direction, parameter);
         }
+        /*
+        private static void _DoTask1()
+        {
+            List<string> direction = new List<string>() { "Пересчёт в дБ", "пересчёт из дБ" };
+            List<string> parameter = new List<string>() { "Напряжение", "Виброускорение" };
+            List<string> threshold = new List<string>() { "Актуальное (10⁻⁶ м/с²)",
+                "Устаревшее (3·10⁻⁴ м/с²)" };
+            Console.Write("Выберите какой пересчет необходимо сделать:");
+            int directionSelected = AgMenu.CallHorizontal(direction, 0, 2, 0, false, false);
+            Console.Write("Выберите физическую величину:");
+            int parameterSelected = AgMenu.CallHorizontal(parameter, 0, 2, 0, false, false);
+            if (parameterSelected == 1)
+            {
+                Console.Write("Выберите пороговое значение дБ:");
+                int thresholdSelected = AgMenu.CallHorizontal(threshold, 0, 2, 0, false, false);
+            }
+        }
+        */
         private static void DoTask2()
         {
             const byte MIN_COUNT_NUMBERS = 1;
@@ -109,7 +141,98 @@ namespace AgHW_AIO.Lessons
             }
             PrintAllList(listSixDigitNumbers);
         }
-
+        private static Direction SelectDirection()
+        {
+            List<string> directionList = new List<string>() { "Пересчёт в дБ", "пересчёт из дБ" };
+            Console.Write("Выберите какой пересчет необходимо сделать:");
+            int directionSelected = AgMenu.CallHorizontal(directionList, 0, 2, 0, false, false);
+            if (directionSelected == 0)
+            {
+                return Direction.To_dB;
+            }
+            return Direction.From_dB;
+        }
+        private static Parameter SelectParameter()
+        {
+            List<string> parameterList = new List<string>() { "Напряжение", "Виброускорение" };
+            Console.Write("Выберите физическую величину:");
+            int parameterSelected = AgMenu.CallHorizontal(parameterList, 0, 2, 0, false, false);
+            if (parameterSelected == 0)
+                return Parameter.Voltage;
+            return Parameter.Vibroacceleration;
+        }
+        private static Threshold SelectThreshold()
+        {
+            List<string> thresholdList = new List<string>() { "Актуальное (10⁻⁶ м/с²)",
+                                                              "Устаревшее (3·10⁻⁴ м/с²)" };
+            Console.Write("Выберите пороговое значение дБ:");
+            int thresholdSelected = AgMenu.CallHorizontal(thresholdList, 0, 2, 0, false, false);
+            if (thresholdSelected == 0)
+                return Threshold.Actual;
+            return Threshold.Old;
+        }
+        private static double CalculateResult(Direction direction, Parameter parameter, Threshold threshold = Threshold.Actual)
+        {
+            double result = 0;
+            if (direction == Direction.To_dB && parameter == Parameter.Voltage)
+                result = CalculateVoltageTo();
+            if (direction == Direction.From_dB && parameter == Parameter.Voltage)
+                result= CalculateVoltageFrom();
+            if (direction == Direction.To_dB && parameter == Parameter.Vibroacceleration)
+                result= CalculateVibroaccelerTo(threshold);
+            if (direction == Direction.From_dB && parameter == Parameter.Vibroacceleration)
+                result=CalculateVibroaccelerationFrom(threshold);
+            return result;
+        }
+        private static double CalculateVoltageTo()
+        {
+            double voltageReference = AgGetInput.GetDouble("Введите опорное напряжение", 5.0, 24.0);
+            double voltageMeasured = AgGetInput.GetDouble("Введите измеренное напряжение", 0.0, 24.0);
+            double result = 20 * Math.Log10(voltageMeasured / voltageReference);
+            return result;
+        }
+        private static double CalculateVoltageFrom()
+        {
+            double voltageReference = AgGetInput.GetDouble("Введите опорное напряжение", 5.0, 24.0);
+            double voltageMeasuredDBV = AgGetInput.GetDouble("Введите измеренное dBV", 0, 100);
+            double result = voltageReference * Math.Pow(10, (0.05 * voltageMeasuredDBV));
+            return result;
+        }
+        private static double CalculateVibroaccelerTo(Threshold threshold)
+        {
+            const double THRESHOLD_ACTUAL = 0.000001;
+            const double THRESHOLD_OLD = 0.0003;
+            double vibroaccelerationMeasured = AgGetInput.GetDouble("Введите измеренное СКЗ виброускорения", 0.0, 10.0);
+            double result = 0;
+            if (threshold == Threshold.Actual)
+                result = 20 * Math.Log10(vibroaccelerationMeasured / THRESHOLD_ACTUAL);
+            if (threshold == Threshold.Old)
+                result = 20 * Math.Log10(vibroaccelerationMeasured / THRESHOLD_OLD);
+            return result;
+        }
+        private static double CalculateVibroaccelerationFrom(Threshold threshold)
+        {
+            const double THRESHOLD_ACTUAL = 0.000001;
+            const double THRESHOLD_OLD = 0.0003;
+            double vibroaccelerationMeasured = AgGetInput.GetDouble("Введите измеренный уровень виброускорения", 0.0, 100.0);
+            double result = 0;
+            if (threshold == Threshold.Actual)
+            result = THRESHOLD_ACTUAL * Math.Pow(10, (0.05 * vibroaccelerationMeasured));
+            if (threshold == Threshold.Old)
+                result = THRESHOLD_OLD * Math.Pow(10, (0.05 * vibroaccelerationMeasured));
+            return result;
+        }
+        private static void PrintResult(double result, Direction direction, Parameter parameter)
+        {
+            if (direction == Direction.To_dB && parameter == Parameter.Voltage)
+                Console.WriteLine($"Результат = {result} dBV");
+            if (direction == Direction.From_dB && parameter == Parameter.Voltage)
+                Console.WriteLine($"Результат = {result} V");
+            if (direction == Direction.To_dB && parameter == Parameter.Vibroacceleration)
+                Console.WriteLine($"Результат = {result} dB");
+            if (direction == Direction.From_dB && parameter == Parameter.Vibroacceleration)
+                Console.WriteLine($"Результат = {result} м/с²");
+        }
         private static List<int> CreatList(byte listMaxLength = 0)
         {
             const int LIST_MIN_LEHGHS = 1;

@@ -63,6 +63,18 @@ namespace AgHW_AIO.AgClasses
                     return result;
             }
         }
+        internal static double GetDouble(string prompt = "", double minValue = double.MinValue, double maxValue = double.MaxValue)
+        {
+            string inputStr = string.Empty;
+            while (true)
+            {
+                Console.WriteLine($"Введите {prompt}");
+                Console.Write($"(Число от {minValue} до {maxValue}): ");
+                inputStr = Console.ReadLine();
+                if (double.TryParse(inputStr, out double result))
+                    return result;
+            }
+        }
         internal static int GetTimeHHMM()
         {
             string inputStr = string.Empty;

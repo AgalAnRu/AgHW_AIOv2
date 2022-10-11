@@ -20,6 +20,10 @@ namespace AgHW_AIO
         }
         private static void SelectLesson()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Title = "VAST C# Learning";
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             int selectedMenuItem = 0;
             do
             {
