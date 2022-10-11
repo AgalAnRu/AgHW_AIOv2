@@ -52,24 +52,6 @@ namespace AgHW_AIO.Lessons
             }
             PrintResult(result, direction, parameter);
         }
-        /*
-        private static void _DoTask1()
-        {
-            List<string> direction = new List<string>() { "Пересчёт в дБ", "пересчёт из дБ" };
-            List<string> parameter = new List<string>() { "Напряжение", "Виброускорение" };
-            List<string> threshold = new List<string>() { "Актуальное (10⁻⁶ м/с²)",
-                "Устаревшее (3·10⁻⁴ м/с²)" };
-            Console.Write("Выберите какой пересчет необходимо сделать:");
-            int directionSelected = AgMenu.CallHorizontal(direction, 0, 2, 0, false, false);
-            Console.Write("Выберите физическую величину:");
-            int parameterSelected = AgMenu.CallHorizontal(parameter, 0, 2, 0, false, false);
-            if (parameterSelected == 1)
-            {
-                Console.Write("Выберите пороговое значение дБ:");
-                int thresholdSelected = AgMenu.CallHorizontal(threshold, 0, 2, 0, false, false);
-            }
-        }
-        */
         private static void DoTask2()
         {
             const byte MIN_COUNT_NUMBERS = 1;
